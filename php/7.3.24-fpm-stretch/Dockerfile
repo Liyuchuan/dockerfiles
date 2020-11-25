@@ -2,6 +2,7 @@ FROM php:7.3.24-fpm-stretch
 ENV REDIS_VERSION 5.3.2
 ENV XDEBUG_VERSION 2.9.8
 ENV AMQP_VERSION 1.10.2
+ENV PROTOBUF_VERSION 3.13.0
 #  Change to ali image source
 RUN echo "deb http://mirrors.aliyun.com/debian/ stretch main non-free contrib" > /etc/apt/sources.list \
     && echo "deb-src http://mirrors.aliyun.com/debian/ stretch main non-free contrib" >> /etc/apt/sources.list \
@@ -43,6 +44,8 @@ RUN echo "deb http://mirrors.aliyun.com/debian/ stretch main non-free contrib" >
     # Install amqp extension
     && apt-get install -y librabbitmq-dev \
     && pecl install amqp-$AMQP_VERSION \
-    && docker-php-ext-enable amqp
+    && docker-php-ext-enable amqp \
+    # Install protobuf extension
+    && docker-php-ext-enable protobuf-$PROTOBUF_VERSION
 EXPOSE 9000
 CMD ["php-fpm"]
