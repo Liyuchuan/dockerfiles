@@ -1,8 +1,7 @@
-FROM php:7.3.24-fpm-stretch
-ENV REDIS_VERSION 5.3.2
-ENV XDEBUG_VERSION 2.9.8
+FROM php:5.6.40-fpm-stretch
+ENV REDIS_VERSION 4.3.0
 ENV AMQP_VERSION 1.10.2
-ENV PROTOBUF_VERSION 3.13.0
+ENV PROTOBUF_VERSION 3.12.3
 #  Change to ali image source
 RUN echo "deb http://mirrors.aliyun.com/debian/ stretch main non-free contrib" > /etc/apt/sources.list \
     && echo "deb-src http://mirrors.aliyun.com/debian/ stretch main non-free contrib" >> /etc/apt/sources.list \
@@ -13,8 +12,8 @@ RUN echo "deb http://mirrors.aliyun.com/debian/ stretch main non-free contrib" >
     && echo "deb http://mirrors.aliyun.com/debian/ stretch-backports main non-free contrib" >> /etc/apt/sources.list \
     && echo "deb-src http://mirrors.aliyun.com/debian/ stretch-backports main non-free contrib" >> /etc/apt/sources.list \
     && rm -f /etc/apt/sources.list.d/* \
+    && apt-get update  \
     # Install gd extension
-    && apt-get update \
     && apt-get install -y \
         libfreetype6-dev \
         libjpeg62-turbo-dev \
@@ -39,11 +38,9 @@ RUN echo "deb http://mirrors.aliyun.com/debian/ stretch main non-free contrib" >
     # Install redis extension
     && pecl install redis-$REDIS_VERSION \
     && docker-php-ext-enable redis \
-    # Install xdebug extension
-    && pecl install xdebug-$XDEBUG_VERSION \
-    && docker-php-ext-enable xdebug \
     # Install amqp extension
     && apt-get install -y librabbitmq-dev \
+    # && echo "autodetect" | pecl install amqp-$AMQP_VERSION \
     && pecl install amqp-$AMQP_VERSION \
     && docker-php-ext-enable amqp \
     # Install protobuf extension
